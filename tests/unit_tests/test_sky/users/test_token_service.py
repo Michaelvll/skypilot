@@ -54,6 +54,7 @@ class TestTokenService:
             assert result['token'].startswith('sky_')
             assert result['token_id'] is not None
             assert result['token_hash'] is not None
+            assert result['last_four'] == result['token'][-4:]
             assert result['creator_user_id'] == 'creator123'
             assert result['service_account_user_id'] == 'sa123'
             assert result['token_name'] == 'test-token'

@@ -37,6 +37,7 @@ import {
   TimestampWithTooltip,
   CustomTooltip as Tooltip,
   LastUpdatedTimestamp,
+  formatFullTimestamp,
 } from '@/components/utils';
 import {
   RotateCwIcon,
@@ -3169,7 +3170,17 @@ function ServiceAccountTokensView({
                 {filteredTokens.map((token) => (
                   <TableRow key={token.token_id}>
                     <TableCell className="truncate" title={token.token_name}>
-                      {token.token_name}
+                      <div className="flex items-center gap-2">
+                        <span className="truncate">{token.token_name}</span>
+                        {token.last_four && (
+                          <span
+                            className="text-xs text-gray-400 font-mono whitespace-nowrap"
+                            title={`Token ending in ${token.last_four}`}
+                          >
+                            ···{token.last_four}
+                          </span>
+                        )}
+                      </div>
                     </TableCell>
                     <TableCell className="truncate">
                       <div className="flex items-center">
@@ -3323,7 +3334,14 @@ function ServiceAccountTokensView({
                       {!token.expires_at ? (
                         'Never'
                       ) : new Date(token.expires_at * 1000) < new Date() ? (
-                        <span className="text-red-600">Expired</span>
+                        <CustomTooltip
+                          content={`Expired on ${formatFullTimestamp(new Date(token.expires_at * 1000))}`}
+                          className="text-sm text-muted-foreground"
+                        >
+                          <span className="text-red-600 border-b border-dotted border-red-400 cursor-help">
+                            Expired
+                          </span>
+                        </CustomTooltip>
                       ) : (
                         <TimestampWithTooltip
                           date={new Date(token.expires_at * 1000)}
