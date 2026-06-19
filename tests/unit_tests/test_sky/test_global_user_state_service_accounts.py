@@ -43,8 +43,8 @@ class TestServiceAccountDatabaseOperations:
                     token_hash='hash123',
                     creator_user_hash='user456',
                     service_account_user_id='sa789',
-                    expires_at=1234567890 + 2592000  # 30 days
-                )
+                    expires_at=1234567890 + 2592000,  # 30 days
+                    last_four='cdef')
 
                 # Verify insert statement was created with correct values
                 mock_sqlite.insert.assert_called_once()
@@ -55,7 +55,8 @@ class TestServiceAccountDatabaseOperations:
                     created_at=1234567890,
                     expires_at=1234567890 + 2592000,
                     creator_user_hash='user456',
-                    service_account_user_id='sa789')
+                    service_account_user_id='sa789',
+                    last_four='cdef')
                 mock_session.execute.assert_called_once_with(
                     mock_insert.values.return_value)
                 mock_session.commit.assert_called_once()
@@ -103,6 +104,7 @@ class TestServiceAccountDatabaseOperations:
         mock_row.expires_at = 1234567890 + 2592000
         mock_row.creator_user_hash = 'user456'
         mock_row.service_account_user_id = 'sa789'
+        mock_row.last_four = 'cdef'
 
         mock_session.query.return_value.filter_by.return_value.first.return_value = mock_row
 
@@ -116,7 +118,8 @@ class TestServiceAccountDatabaseOperations:
             'last_used_at': 1234567900,
             'expires_at': 1234567890 + 2592000,
             'creator_user_hash': 'user456',
-            'service_account_user_id': 'sa789'
+            'service_account_user_id': 'sa789',
+            'last_four': 'cdef'
         }
         mock_session.query.assert_called_once()
 
@@ -141,6 +144,7 @@ class TestServiceAccountDatabaseOperations:
         mock_row.expires_at = 1234567890 + 2592000
         mock_row.creator_user_hash = 'user456'
         mock_row.service_account_user_id = 'sa789'
+        mock_row.last_four = 'cdef'
 
         mock_filter = mock_session.query.return_value.filter_by
         mock_filter.return_value.first.return_value = mock_row
@@ -155,7 +159,8 @@ class TestServiceAccountDatabaseOperations:
             'last_used_at': 1234567900,
             'expires_at': 1234567890 + 2592000,
             'creator_user_hash': 'user456',
-            'service_account_user_id': 'sa789'
+            'service_account_user_id': 'sa789',
+            'last_four': 'cdef'
         }
         # The query must filter by token_hash, not token_id. This is what
         # makes rotation work: after rotation the DB row keeps the original
